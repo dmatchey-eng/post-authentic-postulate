@@ -1,0 +1,57 @@
+name: Epistemological Simulation Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+    inputs:
+      turns:
+        description: 'Number of debate turns to simulate'
+        required: true
+        default: '500'
+      source_url:
+        description: 'Data asset source URL to check provenance'
+        required: true
+        default: 'https://anon-drop-net.onion'
+
+jobs:
+  run-simulation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository Source
+      uses: actions/checkout@v4
+
+    - name: Set up Python Runtime
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Architecture Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # Add testing dependencies if needed later
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Execute Logical Unit Tests
+      run: |
+        # Run test suites before launching main simulation
+        python -m unittest discover -s tests
+
+    - name: Execute Automated 500-Turn Debate Simulation
+      run: |
+        # Fallback to defaults if workflow is triggered via standard push instead of manual UI dispatch
+        TURNS="${{ github.event.inputs.turns || '500' }}"
+        SOURCE="${{ github.event.inputs.source_url || 'https://anon-drop-net.onion' }}"
+        
+        echo "Launching simulation with $TURNS turns against source: $SOURCE"
+        python main.py --turns "$TURNS" --source "$SOURCE" --output simulation_output.json
+
+    - name: Archive Simulation Dialogue Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: epistemological-debate-log
+        path: simulation_output.json
+        retention-days: 7
