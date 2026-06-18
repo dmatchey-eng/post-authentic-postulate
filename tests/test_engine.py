@@ -27,5 +27,17 @@ class TestPostAuthenticEngine(unittest.TestCase):
         self.assertEqual(broadcast["state"], "ANALYTICAL_INVERSION_COMMENTARY")
         self.assertIn("host_monologue", broadcast["transcript"])
 
+    def test_dynamic_podcast_context_inference(self):
+        host = PodcastHostCommentator()
+        
+        # Test case 1: Political context inference
+        political_run = host.broadcast_analysis(1, "https://anon-drop.net")
+        self.assertEqual(political_run["metadata"]["inferred_domain"], "political_leak")
+        
+        # Test case 2: Scientific context inference
+        science_run = host.broadcast_analysis(1, "https://open-science.org")
+        self.assertEqual(science_run["metadata"]["inferred_domain"], "scientific_data")
+
+
 if __name__ == "__main__":
     unittest.main()
