@@ -30,7 +30,7 @@ class TestPostAuthenticEngine(unittest.TestCase):
     def test_dynamic_podcast_context_inference(self):
         host = PodcastHostCommentator()
         
-        # Explicit test vectors to force direct matching paths
+        # Explicit test vectors aligned with GitHub workflow default inputs
         political_url = "https://anon-drop.net"
         scientific_url = "https://open-science.org"
         
