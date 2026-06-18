@@ -27,12 +27,14 @@ class PodcastHostCommentator:
         """ Dynamically infers the subject domain from the source signature metadata """
         source_str = str(disputed_source).lower()
         
-        if "bribe" in source_str or "leak" in source_str or "politician" in source_str:
+        # Hardened string criteria matching to catch root domain testing chains
+        if any(keyword in source_str for keyword in ["bribe", "leak", "politician", "anon-drop", "onion"]):
             return "political_leak"
-        elif "cell" in source_str or "molecular" in source_str or "diagram" in source_str or "science" in source_str:
+        elif any(keyword in source_str for keyword in ["cell", "molecular", "diagram", "science"]):
             return "scientific_data"
         else:
             return "environmental_event"
+
 
     def broadcast_analysis(self, current_turn, disputed_source):
         """
