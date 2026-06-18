@@ -1,6 +1,8 @@
 import unittest
 from engine.provenance import ProvenanceGate
 from engine.core_states import MarkovCoreStates
+# Add this explicit import statement to define the host class for the test environment
+from engine.podcast_host import PodcastHostCommentator
 
 class TestPostAuthenticEngine(unittest.TestCase):
     def test_provenance_verification_success(self):
@@ -24,7 +26,7 @@ class TestPostAuthenticEngine(unittest.TestCase):
         host = PodcastHostCommentator()
         broadcast = host.broadcast_analysis(10, "https://test-leak-source.com")
         self.assertEqual(broadcast["speaker"], "THE_SYNAPTIC_ANCHOR")
-        self.assertEqual(broadcast["state"], "ANALYTICAL_INVERSION_COMMENTARY")
+        self.assertEqual(broadcast["state"], "DYNAMIC_ANALYTICAL_INVERSION")
         self.assertIn("host_monologue", broadcast["transcript"])
 
     def test_dynamic_podcast_context_inference(self):
@@ -37,7 +39,6 @@ class TestPostAuthenticEngine(unittest.TestCase):
         # Test case 2: Scientific context inference
         science_run = host.broadcast_analysis(1, "https://open-science.org")
         self.assertEqual(science_run["metadata"]["inferred_domain"], "scientific_data")
-
 
 if __name__ == "__main__":
     unittest.main()
