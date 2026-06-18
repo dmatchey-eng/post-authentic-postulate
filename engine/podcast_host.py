@@ -23,9 +23,11 @@ class PodcastHostCommentator:
             }
         }
 
-    def _determine_context(self, disputed_source):
+       def _determine_context(self, disputed_source):
         """ Dynamically infers the subject domain from the source signature metadata """
         source_str = str(disputed_source).lower()
+        
+        # Explicit substring containment matching
         if "bribe" in source_str or "leak" in source_str or "politician" in source_str:
             return "political_leak"
         elif "cell" in source_str or "molecular" in source_str or "diagram" in source_str or "science" in source_str:
