@@ -1,9 +1,15 @@
 import argparse
 import json
-from engine.core_states.py import MarkovCoreStates if False else None # standard pathing map
-from engine.core_states import MarkovCoreStates
-from engine.provenance import ProvenanceGate
-from engine.demonstration import DemonstrationSpace
+import sys
+
+try:
+    from engine.core_states import MarkovCoreStates
+    from engine.provenance import ProvenanceGate
+    from engine.demonstration import DemonstrationSpace
+except ImportError as e:
+    print(f"CRITICAL SYSTEM ERROR: Missing required core architecture files.\nDetails: {e}", file=sys.stderr)
+    print("Ensure the engine package directory contains __init__.py, core_states.py, provenance.py, and demonstration.py.", file=sys.stderr)
+    sys.exit(1)
 
 def run_simulation(target_turns, source_url, output_path):
     thread_history = []
