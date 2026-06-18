@@ -6,9 +6,9 @@ try:
     from engine.core_states import MarkovCoreStates
     from engine.provenance import ProvenanceGate
     from engine.demonstration import DemonstrationSpace
+    from engine.podcast_host import PodcastHostCommentator
 except ImportError as e:
     print(f"CRITICAL SYSTEM ERROR: Missing required core architecture files.\nDetails: {e}", file=sys.stderr)
-    print("Ensure the engine package directory contains __init__.py, core_states.py, provenance.py, and demonstration.py.", file=sys.stderr)
     sys.exit(1)
 
 def run_simulation(target_turns, source_url, output_path):
@@ -18,12 +18,18 @@ def run_simulation(target_turns, source_url, output_path):
     prov_gate = ProvenanceGate(source_url)
     if not prov_gate.is_verified():
         thread_history.append(prov_gate.generate_invalidation_receipt())
-        # Automatically step outside due to unverified provenance
-        resolution = DemonstrationSpace.evaluate_physical_parameters(0, "SYSTEM_GATE", "BOTH_UNITS")
+        
+        # The Host breaks in to provide context on the unverified source file
+        host_bot = PodcastHostCommentator()
+        thread_history.append(host_bot.broadcast_analysis(0, source_url))
+        
+        # Automatically step outside
+        resolution = DemonstrationSpace.evaluate_physical_parameters(1, "SYSTEM_GATE", "BOTH_UNITS")
         thread_history.append(resolution)
     else:
         # Phase 2: Dialogue Flow
         state_engine = MarkovCoreStates()
+        host_bot = PodcastHostCommentator()
         deadlock_counter = 0
         current_turn = 0
         
@@ -37,14 +43,19 @@ def run_simulation(target_turns, source_url, output_path):
             else:
                 deadlock_counter = max(0, deadlock_counter - 1)
                 
+            # If a deadlock is imminent, insert the host commentary block before exiting text mode
             if deadlock_counter >= 4:
+                # Host Interjection
+                thread_history.append(host_bot.broadcast_analysis(current_turn, source_url))
+                current_turn += 1
+                
+                # Escalation Outside
                 challenger = turn_data["speaker"]
                 target = "skeptic" if challenger == "denier" else "denier"
                 resolution = DemonstrationSpace.evaluate_physical_parameters(current_turn, challenger, target)
                 thread_history.append(resolution)
                 break
 
-    # Save artifact for GitHub Actions pipeline
     with open(output_path, "w") as f:
         json.dump(thread_history, f, indent=2)
     print(f"Simulation successfully completed. Log generated at: {output_path}")
