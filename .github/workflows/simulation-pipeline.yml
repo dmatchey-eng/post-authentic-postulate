@@ -32,8 +32,44 @@ jobs:
     - name: Install Architecture Dependencies
       run: |
         python -m pip install --upgrade pip
-        # Add testing dependencies if needed later
+        # Install flake8 for the explicit compilation and syntax health check
+        pip install flake8
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Pre-Flight Check: Verify Critical Structural Files
+      run: |
+        echo "Verifying presence of baseline architecture modules..."
+        MISSING_FILES=0
+        
+        # Array of absolute mandatory files for the Post-Authentic Postulate framework
+        REQUIRED_FILES=(
+          "main.py"
+          "engine/__init__.py"
+          "engine/core_states.py"
+          "engine/provenance.py"
+          "engine/demonstration.py"
+          "tests/test_engine.py"
+        )
+        
+        for file in "${REQUIRED_FILES[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "❌ ERROR: Mandatory file '$file' is missing from the directory structure."
+            MISSING_FILES=$((MISSING_FILES + 1))
+          else
+            echo "✅ Verified: $file"
+          fi
+        done
+        
+        if [ $MISSING_FILES -gt 0 ]; then
+          echo "Pipeline aborted due to structural failure."
+          exit 1
+        fi
+
+    - name: Pre-Flight Check: Catch Future Syntax/Compilation Errors
+      run: |
+        echo "Scanning files for syntax errors and critical compilation bugs..."
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
     - name: Execute Logical Unit Tests
       run: |
