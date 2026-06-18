@@ -35,7 +35,6 @@ class PodcastHostCommentator:
         else:
             return "environmental_event"
 
-
     def broadcast_analysis(self, current_turn, disputed_source):
         """
         Dynamically extracts context from the asset signature and evaluates
