@@ -20,5 +20,12 @@ class TestPostAuthenticEngine(unittest.TestCase):
         self.assertEqual(turn["speaker"], "denier")
         self.assertIn(turn["state"], ["NORMAL", "FLAW_REPETITION", "LOGIC_GLITCH"])
 
+    def test_podcast_host_block_generation(self):
+        host = PodcastHostCommentator()
+        broadcast = host.broadcast_analysis(10, "https://test-leak-source.com")
+        self.assertEqual(broadcast["speaker"], "THE_SYNAPTIC_ANCHOR")
+        self.assertEqual(broadcast["state"], "ANALYTICAL_INVERSION_COMMENTARY")
+        self.assertIn("host_monologue", broadcast["transcript"])
+
 if __name__ == "__main__":
     unittest.main()
