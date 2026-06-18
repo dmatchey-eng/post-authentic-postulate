@@ -4,39 +4,57 @@ class PodcastHostCommentator:
     def __init__(self):
         self.host_identity = "THE_SYNAPTIC_ANCHOR"
         
-        # Audio commentary templates implementing the Analytical Inversion Rule
-        self.monologue_segments = [
-            "Look, let's step back from the 'pixels vs reality' debate for a second. Even if this file was spat out by a generative cluster, we have to look at the Epistemic Isomorphism here. The underlying data points match the physical telemetry perfectly. The prompt isn't inventing reality; it's compressing it.",
-            "Everyone in the live chat is screaming 'deepfake,' but they are missing the forest for the trees. This video is a Synthetic Archive. It aggregates three hundred scattered smartphone audio feeds and traffic-cam angles into one clean render. No single lens saw this viewpoint, but the final composite is a genuine representation of the occurrence.",
-            "We have to apply the Analytical Inversion Rule here, people. Stop asking if a camera recorded this natively. Ask if the diagrammed payload works out in the lab. The molecular structure shown in this AI-generated map has just been replicated by a team on the ground. The image is synthetic; the science it uncovers is entirely genuine."
-        ]
-        
-        self.audience_reactions = [
-            "[Chat Logs: User_882]: Wait, so a fake video can tell a real story?",
-            "[Chat Logs: Vector_Skeptic]: The host is right. Origin doesn't matter if the structural prediction hits 100% accuracy.",
-            "[Chat Logs: Default_Denier]: Sounds like cognitive coping. If it's AI, it's a simulation. Period."
-        ]
+        # Dynamic lexicon pools mapped by topic type
+        self.lexicon = {
+            "political_leak": {
+                "monologue": "Look, stop looking at the compression artifacts on the politician's collar. Apply Epistemic Isomorphism here. The bank ledger transfers match the physical timeline perfectly. The AI didn't invent the corruption; it merely visualized a pre-existing financial trail.",
+                "chat_pos": "[Chat Logs: PolicyAlpha]: The money trail is validated. The visual render is just a wrapper for verified ledger transactions.",
+                "chat_neg": "[Chat Logs: DeepStateDenier]: Blatant deepfake designed to tank the election. Total narrative construction."
+            },
+            "scientific_data": {
+                "monologue": "The live chat is losing its mind because an optical lens didn't snap this cell mutation directly. This is a Pragmatic Instrumentalist victory! The synthetic molecular map accurately predicted the receptor binding structure. The imagery is computed, but the chemistry is 100% genuine.",
+                "chat_pos": "[Chat Logs: BioPragmatist]: Exactly. If the structural simulation successfully cures the disease, who cares who arranged the pixels?",
+                "chat_neg": "[Chat Logs: PureAnalog]: If a human didn't look through a physical microscope, it's just statistical speculation."
+            },
+            "environmental_event": {
+                "monologue": "Everyone yelling 'CGI drone footage' is missing the point of a Synthetic Archive. This render compiles three hundred erratic satellite pings and thermal sensors into one spatial model. It isn't a fake disaster; it's an aggregate structural mapping of a real occurrence.",
+                "chat_pos": "[Chat Logs: EcoSensor_Net]: The thermal data layer matches the regional seismic shift perfectly. The event is real.",
+                "chat_neg": "[Chat Logs: SimulationTruther]: They are using procedural generation software to manufacture ecological panic. Reject it."
+            }
+        }
+
+    def _determine_context(self, disputed_source):
+        """ Dynamically infers the subject domain from the source signature metadata """
+        source_str = str(disputed_source).lower()
+        if "bribe" in source_str or "leak" in source_str or "politician" in source_str:
+            return "political_leak"
+        elif "cell" in source_str or "molecular" in source_str or "diagram" in source_str or "science" in source_str:
+            return "scientific_data"
+        else:
+            return "environmental_event"
 
     def broadcast_analysis(self, current_turn, disputed_source):
         """
-        Interjects into the text deadlock to provide high-level 
-        philosophical commentary via the Analytical Inversion Rule.
+        Dynamically extracts context from the asset signature and evaluates
+        truth values under the Analytical Inversion Rule.
         """
-        monologue = random.choice(self.monologue_segments)
-        chat_reaction_1 = random.choice(self.audience_reactions)
-        chat_reaction_2 = random.choice([r for r in self.audience_reactions if r != chat_reaction_1])
+        context_key = self._determine_context(disputed_source)
+        active_pool = self.lexicon[context_key]
 
         return {
             "turn": current_turn + 1,
             "speaker": self.host_identity,
-            "state": "ANALYTICAL_INVERSION_COMMENTARY",
+            "state": "DYNAMIC_ANALYTICAL_INVERSION",
             "metadata": {
-                "broadcast_topic": "Bypassing Ontology for Epistemic Truth",
-                "target_material": disputed_source
+                "inferred_domain": context_key,
+                "analyzed_target": disputed_source
             },
             "transcript": {
-                "host_monologue": monologue,
-                "audience_feedback_stream": [chat_reaction_1, chat_reaction_2]
+                "host_monologue": active_pool["monologue"],
+                "audience_feedback_stream": [
+                    active_pool["chat_pos"],
+                    active_pool["chat_neg"]
+                ]
             },
-            "philosophical_takeaway": "The host successfully reframes the dispute. The question is no longer whether the asset is mechanically real, but whether its internal data model accurately represents an inherent factual occurrence."
+            "philosophical_takeaway": f"The host shifts focus away from pixel origin. By classifying this as a {context_key.replace('_', ' ')}, they prove that synthetic data can accurately deliver objective factual truth."
         }
