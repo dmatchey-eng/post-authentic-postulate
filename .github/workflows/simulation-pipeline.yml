@@ -40,15 +40,15 @@ jobs:
         echo "Verifying presence of baseline architecture modules..."
         MISSING_FILES=0
         REQUIRED_FILES=(
-  "engine/__init__.py"
-  "engine/core_states.py"
-  "engine/provenance.py"
-  "engine/demonstration.py"
-  "tests/test_engine.py"
-  "LICENSE"
-  "README.md"
-  "main.py"
-)
+          "engine/__init__.py"
+          "engine/core_states.py"
+          "engine/provenance.py"
+          "engine/demonstration.py"
+          "tests/test_engine.py"
+          "LICENSE"
+          "README.md"
+          "main.py"
+        )
 
         for file in "${REQUIRED_FILES[@]}"; do
           if [ ! -f "$file" ]; then
