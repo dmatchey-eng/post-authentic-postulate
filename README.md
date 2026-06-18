@@ -12,16 +12,18 @@ This engine simulates text-based debates between digital skeptics and deniers. I
 post-authentic-postulate/
 ├── .github/
 │   └── workflows/
-│       └── simulation-pipeline.yml  # Automated testing and thread generation CI/CD
+│       └── simulation-pipeline.yml
 ├── engine/
 │   ├── __init__.py
-│   ├── core_states.py               # Markov transition models & philosophical vocab pools
-│   ├── provenance.py                # Source tracking & Invalidation Receipt generation
-│   └── demonstration.py             # Physical yard & silicon-level hardware evaluation
-├── main.py                          # Simulation orchestrator and runtime CLI script
+│   ├── core_states.py
+│   ├── demonstration.py
+│   └── provenance.py
 ├── tests/
-│   └── test_engine.py               # Unit tests verifying state logic boundaries
-└── README.md                        # Documentation and architecture blueprint
+│   └── test_engine.py
+├── LICENSE                          
+├── README.md                       
+└── main.py                         
+
 ```
 
 ---
